@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+
+import gtk
+
+from os import listdir
+from os.path import join
+
+from sys import argv
+from sys import exit
+
+def get_gtk_themes():
+    "theme directories must contain a gtk-2.0 directory inside of them"
+    theme_d = gtk.rc_get_theme_dir()
+
+    theme_names = []
+    for theme in listdir(theme_d):
+        if "gtk-2.0" in listdir(join(theme_d, theme)):
+            theme_names.append(theme)
+
+    return theme_names
+
+
+def gtk_theme_select(theme):
+
+    theme_str = 'include "%s"' % join(gtk.rc_get_theme_dir(), theme)
+    print theme_str
+    
+        
+"""
+writing out a .gtkrc-2.0 is
+
+theme:
+
+include "/full/path/to/theme"
+theme directory must include gtk-2.0 directory, and a gtkrc entry inside of *that*
+
+
+features
+
+
+theme list
+
+theme select <theme_name>
+
+font list
+
+font select <font_name> <font_size>
+
+icon list
+
+icon select #
+
+theme selection
+
+font choice?
+
+
+
+
+
+"""
+
+
+# option parse manually
+# command action
+
+# switcher theme list
+
+def parse_args(args):
+    try:
+        command = args[1]
+        action = args[2]
+    except IndexError:
+        do_help()
+
+    if command == "theme":
+        if action == "list":
+            for name in get_gtk_themes(): print name
+        if action == "select":
+            try:
+                selection = args[3]
+            except IndexError:
+                print "theme not selected"
+                do_help()
+            
+            if selection in get_gtk_themes():
+                gtk_theme_select(selection)
+            else:
+                print "theme does not exist"
+                
+
+
+def do_help():
+    print "this is the help"
+    exit(1)
+
+
+
+if __name__ == "__main__":
+    parse_args(argv)
+
+
