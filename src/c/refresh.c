@@ -15,8 +15,8 @@ void send_refresh_signal(void)
 
 static PyObject* py_refresh(PyObject* self, PyObject* args) {
     send_refresh_signal();
-    char *s = "success";
-    return Py_BuildValue("s", s);
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
 static PyMethodDef refresh_methods[] = {
